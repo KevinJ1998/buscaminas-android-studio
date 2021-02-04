@@ -57,37 +57,35 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-        if (activo) {
+        if (activo)
             for (int f = 0; f < 8; f++) {
                 for (int c = 0; c < 8; c++) {
-                    if (casillas[f][c].dentro((int) event.getX(), (int) event.getX())) {
+                    if (casillas[f][c].dentro((int) event.getX(), (int) event.getY())) {
                         casillas[f][c].destapado = true;
                         if (casillas[f][c].contenido == 80) {
-                            Toast.makeText(this, "Booooooommmm!!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "Booooooooommmm!!!", Toast.LENGTH_LONG).show();
                             activo = false;
-                        } else if (casillas[f][c].contenido == 0) {
+                        } else if (casillas[f][c].contenido == 0)
                             recorrer(f, c);
-                            fondo.invalidate();
-
-                        }
-
+                        fondo.invalidate();
                     }
                 }
             }
-        }
         if (gano() && activo) {
-            Toast.makeText(this, "Ganaste!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Ganaste!!", Toast.LENGTH_LONG).show();
             activo = false;
         }
+
         return true;
     }
 
     class Tablero extends View {
+
         public Tablero(Context context) {
             super(context);
         }
 
-        public void onDraw(Canvas canvas) {
+        protected void onDraw(Canvas canvas) {
             canvas.drawRGB(0, 0, 0);
             int ancho = 0;
             if (canvas.getWidth() < canvas.getHeight()) {
@@ -102,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             paint2.setTextSize(20);
             paint2.setTypeface(Typeface.DEFAULT_BOLD);
             paint2.setARGB(255, 0, 0, 255);
-            Paint paintLineal = new Paint();
-            paintLineal.setARGB(255, 255, 255, 255);
+            Paint paintlinea1 = new Paint();
+            paintlinea1.setARGB(255, 255, 255, 255);
             int filaact = 0;
             for (int f = 0; f < 8; f++) {
                 for (int c = 0; c < 8; c++) {
@@ -114,8 +112,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                         paint.setARGB(255, 153, 153, 153);
                     }
                     canvas.drawRect(c * anchocua, filaact, c * anchocua + anchocua - 2, filaact + anchocua - 2, paint);
-                    canvas.drawLine(c * anchocua, filaact, c * anchocua + anchocua, filaact, paintLineal);
-                    canvas.drawLine(c * anchocua + anchocua - 1, filaact, c * anchocua + anchocua - 1, filaact + anchocua, paintLineal);
+                    canvas.drawLine(c * anchocua, filaact, c * anchocua + anchocua, filaact, paintlinea1);
+                    canvas.drawLine(c * anchocua + anchocua - 1, filaact, c * anchocua + anchocua - 1, filaact + anchocua,
+                            paintlinea1);
+
                     if (casillas[f][c].contenido >= 1 && casillas[f][c].contenido <= 8 && casillas[f][c].destapado) {
                         canvas.drawText(String.valueOf(casillas[f][c].contenido), c * anchocua + (anchocua / 2) - 8, filaact + anchocua / 2, paint2);
                     }
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
     }
 
-    public void disponerBombas() {
+    private void disponerBombas() {
         int cantidad = 8;
         do {
             int fila = (int) (Math.random() * 8);
@@ -139,19 +139,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 casillas[fila][columna].contenido = 80;
                 cantidad--;
             }
-
         } while (cantidad != 0);
     }
 
     private boolean gano() {
         int cant = 0;
-        for (int f = 0; f < 8; f++) {
-            for (int c = 0; c < 8; c++) {
+        for (int f = 0; f < 8; f++)
+            for (int c = 0; c < 8; c++)
                 if (casillas[f][c].destapado) {
                     cant++;
                 }
-            }
-        }
         if (cant == 56) {
             return true;
         } else {
@@ -165,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 if (casillas[f][c].contenido == 0) {
                     int cant = contarCoordenada(f, c);
                     casillas[f][c].contenido = cant;
-
                 }
             }
         }
@@ -188,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 total++;
             }
         }
+
         if (columna + 1 < 8) {
             if (casillas[fila][columna + 1].contenido == 80) {
                 total++;
@@ -198,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 total++;
             }
         }
+
         if (fila + 1 < 8) {
             if (casillas[fila + 1][columna].contenido == 80) {
                 total++;
@@ -205,6 +203,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
         if (fila + 1 < 8 && columna - 1 >= 0) {
             if (casillas[fila + 1][columna - 1].contenido == 80) {
+                total++;
+            }
+        }
+        if (columna - 1 >= 0) {
+            if (casillas[fila][columna - 1].contenido == 80) {
                 total++;
             }
         }
